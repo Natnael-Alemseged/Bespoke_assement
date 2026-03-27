@@ -1,0 +1,10 @@
+# Secrets
+.env
+
+# Harbor job output
+jobs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
