@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package inventory;
+
+service InventoryService {
+  rpc CheckInventory (CheckRequest) returns (CheckResponse);
+  rpc ReserveInventory (ReserveRequest) returns (ReserveResponse);
+  rpc ListProducts (ListRequest) returns (ListResponse);
+}
+
+message CheckRequest {
+  string product_id = 1;
+}
+
+message CheckResponse {
+  string product_id = 1;
+  int32 stock = 2;
+  bool available = 3;
+}
+
+message ReserveRequest {
+  string product_id = 1;
+  int32 quantity = 2;
+  string reservation_id = 3;
+}
+
+message ReserveResponse {
+  bool success = 1;
+  string message = 2;
+  int32 remaining_stock = 3;
+}
+
+message ListRequest {}
+
+message Product {
+  string product_id = 1;
+  string name = 2;
+  int32 stock = 3;
+}
+
+message ListResponse {
+  repeated Product products = 1;
+}
