@@ -54,4 +54,4 @@ cd /app && python server.py
 
 - Start by running the server and exercising each RPC to observe failure modes.
 - Read error output carefully — tracebacks will point you toward the issues.
-- There are **exactly 3 bugs**, all in `/app/server.py`.
+- All bugs are in `/app/server.py`.
