@@ -1,6 +1,6 @@
 # Fix the Broken Inventory Management gRPC Service
 
-You are working with a Python gRPC inventory management microservice located in `/app/`. The service was recently refactored and is now failing. Your goal is to identify **all bugs** in the server implementation and fix them so the service works correctly.
+You are working with a Python gRPC inventory management microservice located in `/app/`. The service was recently refactored and is now failing production checks. Restore correct behavior so the service satisfies the requirements below.
 
 ## Service Overview
 
@@ -38,10 +38,10 @@ Your fix must ensure that all of the following are true:
 
 ## Files
 
-- `/app/server.py` — The main gRPC server implementation. **This is the only file that contains bugs.**
-- `/app/inventory.proto` — The protobuf service definition (for reference only).
-- `/app/inventory_pb2.py` — Generated protobuf message classes (do not modify).
-- `/app/inventory_pb2_grpc.py` — Generated gRPC service stubs (do not modify).
+- `/app/server.py` — Main gRPC server implementation (primary place to investigate).
+- `/app/inventory.proto` — Protobuf service definition (reference).
+- `/app/inventory_pb2.py` — Generated message classes (do not modify).
+- `/app/inventory_pb2_grpc.py` — Generated gRPC stubs (do not modify).
 - `/app/requirements.txt` — Python dependencies.
 
 ## Running the Server
@@ -49,9 +49,3 @@ Your fix must ensure that all of the following are true:
 ```bash
 cd /app && python server.py
 ```
-
-## Hints
-
-- Start by running the server and exercising each RPC to observe failure modes.
-- Read error output carefully — tracebacks will point you toward the issues.
-- All bugs are in `/app/server.py`.
