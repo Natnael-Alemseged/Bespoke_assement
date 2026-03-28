@@ -1,4 +1,5 @@
-FROM python:3.12-slim
+# Pin image series for reproducible builds (bump when upgrading Python patch).
+FROM python:3.12-slim-bookworm
 
 WORKDIR /app
 

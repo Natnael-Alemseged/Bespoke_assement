@@ -2,11 +2,13 @@
 
 Aligned with the Bespoke take-home: **oracle** plus **terminus-2** with **Groq** `moonshotai/kimi-k2-instruct-0905` and **k=10** attempts.
 
+A **requirement ↔ test mapping** for graders is in [`../README.md`](../README.md) (QC section).
+
 ## 1. Oracle (golden solution) — repeated green runs
 
 The verifier runs `solution/solve.sh` and `tests/test_outputs.py`.
 
-- **Log:** [oracle-reliability.txt](./oracle-reliability.txt) — five consecutive oracle runs, each **Mean reward 1.000**, **Errors 0**.
+- **Log:** [oracle-reliability.txt](./oracle-reliability.txt) — five consecutive oracle runs (see file), each **Mean reward 1.000**, **Errors 0**.
 
 **One-shot check** (from the **parent** of this task folder, i.e. where `grpc_service_debug/` lives):
 

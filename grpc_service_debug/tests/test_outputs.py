@@ -110,7 +110,7 @@ def test_check_inventory_all_initial_values(stub):
 
 
 # ===========================================================================
-# ListProducts — validates Bug 2 fix (data["qty"] → data["stock"])
+# ListProducts
 # ===========================================================================
 
 def test_list_products_count(stub):
@@ -164,7 +164,6 @@ def test_reserve_partial_quantity_succeeds(stub):
 def test_reserve_exact_quantity_succeeds(stub):
     """Reserving exactly the available stock must succeed.
     PROD-004 (Monitor, stock=5): reserve 5 → remaining=0.
-    Validates Bug 1 fix: the condition must be >= not >.
     """
     r = stub.ReserveInventory(
         inventory_pb2.ReserveRequest(
@@ -234,8 +233,7 @@ def test_sequential_reservations_accumulate_correctly(stub):
 
 
 # ===========================================================================
-# Instance isolation — unit test (validates Bug 3 fix)
-# Two separate InventoryServicer instances must have independent inventory.
+# Instance isolation — direct servicer checks (no subprocess)
 # ===========================================================================
 
 from server import InventoryServicer as _Servicer  # noqa: E402
@@ -272,6 +270,34 @@ def test_instances_have_independent_inventory():
         inventory_pb2.CheckRequest(product_id="PROD-001"), ctx
     )
     assert r.stock == 10, (
-        f"Instance B shows stock={r.stock}, expected 10. "
-        "Instances are sharing the same inventory dict (missing deep copy)."
+        f"Instance B shows stock={r.stock}, expected 10 (instances must not share inventory)."
     )
+
+
+def test_check_inventory_empty_product_id_invalid(stub):
+    """Empty product_id must yield INVALID_ARGUMENT on CheckInventory."""
+    with pytest.raises(grpc.RpcError) as exc:
+        stub.CheckInventory(inventory_pb2.CheckRequest(product_id=""))
+    assert exc.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+
+
+def test_reserve_non_positive_quantity_invalid(stub):
+    """Non-positive quantity must yield INVALID_ARGUMENT on ReserveInventory."""
+    with pytest.raises(grpc.RpcError) as exc:
+        stub.ReserveInventory(
+            inventory_pb2.ReserveRequest(
+                product_id="PROD-001", quantity=0, reservation_id="R-ZERO-QTY"
+            )
+        )
+    assert exc.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+
+
+def test_reserve_unknown_product_not_found(stub):
+    """Unknown product ID on ReserveInventory must yield NOT_FOUND."""
+    with pytest.raises(grpc.RpcError) as exc:
+        stub.ReserveInventory(
+            inventory_pb2.ReserveRequest(
+                product_id="NO-SUCH-SKU", quantity=1, reservation_id="R-UNK"
+            )
+        )
+    assert exc.value.code() == grpc.StatusCode.NOT_FOUND
