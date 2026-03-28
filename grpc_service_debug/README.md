@@ -31,7 +31,8 @@ Agent / difficulty validation (Groq + kimi-k2) is documented under [`jobs/EVIDEN
 | `ReserveInventory` → `RESOURCE_EXHAUSTED` when quantity > stock | `test_reserve_over_stock_*`, `test_reserve_zero_stock_*` |
 | `ListProducts` returns all products, names, stock without error | `test_list_products_*` |
 | Independent inventory per servicer instance | `test_instances_have_independent_inventory` |
-| Invalid inputs (`empty` id, quantity ≤ 0, unknown product on reserve) | `test_check_inventory_empty_*`, `test_reserve_non_positive_*`, `test_reserve_unknown_product_*` |
+
+The five rows above are the five numbered requirements in `instruction.md` only. (Input-validation branches in `server.py` are unchanged by the bugfix and are not listed as verifier targets.)
 
 ## Zip for the Bespoke form
 
