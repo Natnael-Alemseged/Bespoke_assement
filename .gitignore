@@ -1,8 +1,18 @@
 # Secrets
 .env
 
-# Harbor job output
-jobs/
+# Harbor: large timestamped job trees (default location when using
+# `harbor run` from repo root with `-p "./grpc_service_debug"` → `./jobs/`)
+/jobs/
+
+# Curated files under grpc_service_debug/jobs/ are tracked; ignore Harbor
+# spillover inside the same directory if you run harbor with `-p "."` here.
+/grpc_service_debug/jobs/*
+!/grpc_service_debug/jobs/README.md
+!/grpc_service_debug/jobs/EVIDENCE.md
+!/grpc_service_debug/jobs/oracle-reliability.txt
+!/grpc_service_debug/jobs/terminus-2-k10-groq-kimi-k2.md
+/grpc_service_debug/jobs/*.log
 
 # Python
 __pycache__/
