@@ -63,6 +63,17 @@ Per take-home: average agent success rate should be **> 0.0** and **< 0.7** (har
 
 Keep the Harbor output directory for your **terminus-2 k=10** run if graders request full logs; it is usually under `./jobs/<timestamp>/` relative to where you ran the command.
 
-## 5. Partial run (2026-03-28) — what to tell graders
+## 5. Terminus-2 k=10 result — 2026-03-28 (valid run, paid Groq tier)
 
-A **terminus-2** job with **`k=10`**, **`n=1`**, **`groq/moonshotai/kimi-k2-instruct-0905`** was started with a valid `GROQ_API_KEY`. It did **not** complete cleanly: early trials hit **Groq TPM rate limits** (`RateLimitError`) and **agent setup timeouts** while terminus-2 installed tmux/asciinema in the container. Evidence paths and details are recorded in [terminus-2-k10-groq-kimi-k2.md](./terminus-2-k10-groq-kimi-k2.md). Re-run the same command after capacity/credits improve or when you can use a tier with higher TPM; the **oracle** log still shows the golden path is sound.
+| Metric | Value |
+|--------|-------|
+| Mean reward | **0.200** |
+| Trials | 10 |
+| Errors | 1 (AgentTimeoutError) |
+| reward = 1.0 | 2 trials |
+| reward = 0.0 | 8 trials |
+| Job directory | `jobs/2026-03-28__16-30-13/` (repo root) |
+
+**Success rate 0.2 — confirmed within target band (> 0.0 and < 0.7). Task is hard but solvable. ✓**
+
+Full per-trial breakdown in [terminus-2-k10-groq-kimi-k2.md](./terminus-2-k10-groq-kimi-k2.md).

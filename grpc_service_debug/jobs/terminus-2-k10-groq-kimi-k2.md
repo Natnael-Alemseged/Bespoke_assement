@@ -29,36 +29,31 @@ Or use `./scripts/harbor-terminus-k10.sh` from inside `grpc_service_debug/` (def
 
 ## Results
 
-### Run 2026-03-28T15:42 UTC — completed, infrastructure-blocked
+### Run 2026-03-28T16:30 UTC — **VALID k=10 run (paid tier)**
 
 | Field | Value |
 |-------|--------|
-| Date (UTC) | 2026-03-28 ~12:42 UTC |
-| Harbor job directory | `jobs/2026-03-28__15-42-56/` (repo root) |
+| Date (UTC) | 2026-03-28 16:30–16:50 UTC |
+| Harbor job directory | `jobs/2026-03-28__16-30-13/` (repo root) |
 | Agent | terminus-2 (moonshotai-kimi-k2-instruct-0905) |
 | Model | groq/moonshotai/kimi-k2-instruct-0905 |
 | k (attempts) | 10 |
-| n (concurrent trials) | 1 |
-| Trials completed | 1 |
-| Errors | 9 (`RateLimitError`) |
-| Mean reward (Harbor report) | 0.000 |
-| Reward distribution | reward=0.0 × 1 |
-| Exception distribution | RateLimitError × 9 |
+| n (concurrent trials) | 2 |
+| Trials completed | 10 |
+| Errors | 1 (`AgentTimeoutError`) |
+| **Mean reward** | **0.200** |
+| Reward distribution | reward=1.0 × 2, reward=0.0 × 8 |
+| Exception distribution | AgentTimeoutError × 1 (within the 8 failures) |
 
-**Root cause:** Groq `on_demand` service tier caps kimi-k2 at **10,000 TPM**. Each terminus-2 agent step requests **11,000–11,500 tokens**, permanently exceeding the per-minute limit. Only 1 of 10 trials ran to agent completion (reward=0.0 — agent did not solve the task); the remaining 9 were killed by `RateLimitError` before the agent could act.
+**Success rate: 0.2 — within the required target band (> 0.0 and < 0.7). ✓**
 
-**This is a Groq tier constraint, not a task/oracle problem.** The oracle runs at 1.000 (6/6). A valid difficulty run requires **Groq Dev tier** (higher TPM) or a model with lower per-request token usage.
+The agent solved the task on 2 of 10 attempts. The remaining 8 either timed out or failed to identify and fix all three bugs. This confirms the task is **hard but solvable**.
 
 **Per-trial summary:**
 
-| Outcome | Count | Cause |
+| Outcome | Count | Notes |
 |---------|-------|-------|
-| Completed (reward=0.0) | 1 | Agent ran but did not fix all bugs |
-| Errored | 9 | `RateLimitError`: request size > 10k TPM cap |
-
-**To obtain a valid k=10 run:**
-1. Upgrade Groq to **Dev tier** (removes the 10k TPM cap) — costs are reimbursable per take-home spec.
-2. Re-run: `harbor run -p "./grpc_service_debug" -a terminus-2 --model groq/moonshotai/kimi-k2-instruct-0905 -k 10 -n 1 -y --env-file .env`
-3. Paste Harbor’s final summary table in this file.
+| reward = 1.0 | 2 | Agent found and fixed all 3 bugs |
+| reward = 0.0 | 8 | Agent did not fix all bugs (1 also hit AgentTimeoutError) |
 
 Oracle-only reliability is logged in [oracle-reliability.txt](./oracle-reliability.txt). This table is for the **terminus-2 / k=10 / Groq / kimi-k2** agent run.
